@@ -22,6 +22,11 @@ public class PayrollDatabaseImpl implements PayrollDatabase {
     }
 
     @Override
+    public void deleteEmployee(final int empId) {
+        employees.remove(empId);
+    }
+
+    @Override
     public void clear() {
         employees.clear();
     }
