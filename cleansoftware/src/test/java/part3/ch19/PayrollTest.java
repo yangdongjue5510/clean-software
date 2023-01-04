@@ -1,10 +1,13 @@
 package part3.ch19;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static part3.ch19.Application.GpayrollDatabase;
 
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +32,30 @@ class PayrollTest {
 
         assertAll(
                 () -> assertEquals("Bob", employee.getName()),
-                () -> assertEquals(1000.00, schedule.getSalary())
+                () -> assertEquals(1000.00, schedule.getSalary()),
+                () -> assertNotNull(classification),
+                () -> assertNotNull(schedule),
+                () -> assertNotNull(method)
+        );
+    }
+
+    @Test
+    @DisplayName("시간제 직원을 추가하는 기능을 테스트한다.")
+    void addHourlyEmployee() {
+        int empId = 1;
+        AddHourlyEmployee transaction = new AddHourlyEmployee(empId, "Bob", "Home", 1000.00);
+        transaction.execute();
+
+        Employee employee = GpayrollDatabase.getEmployee(empId);
+        HourlyPaymentClassification classification = (HourlyPaymentClassification) employee.getClassification();
+        WeeklySchedule schedule = (WeeklySchedule) employee.getSchedule();
+        HoldMethod method = employee.getMethod();
+
+        assertAll(
+                () -> assertEquals("Bob", employee.getName()),
+                () -> assertNotNull(classification),
+                () -> assertNotNull(schedule),
+                () -> assertNotNull(method)
         );
     }
 
@@ -44,5 +70,23 @@ class PayrollTest {
         deleteEmployee.execute();
 
         assertNull(GpayrollDatabase.getEmployee(empId));
+    }
+
+    @Test
+    @DisplayName("타임카드를 시간제 직원에 더하는 기능을 테스트한다.")
+    void testTimeCardTransaction() {
+        int empId = 1;
+        final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 1000.00);
+        addHourlyEmployee.execute();
+
+        TimeCardTransaction timeCardTransaction = new TimeCardTransaction(LocalDate.now(), 8.0, empId);
+        timeCardTransaction.execute();
+
+        final Employee employee = GpayrollDatabase.getEmployee(empId);
+        final PaymentClassification classification = employee.getClassification();
+        final HourlyPaymentClassification hourlyPaymentClassification = (HourlyPaymentClassification) classification;
+
+        final TimeCard timeCard = hourlyPaymentClassification.getTimeCard(LocalDate.now());
+        assertThat(timeCard.getHours()).isEqualTo(8.0);
     }
 }
