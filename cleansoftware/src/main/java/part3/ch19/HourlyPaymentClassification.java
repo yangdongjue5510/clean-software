@@ -19,4 +19,8 @@ public class HourlyPaymentClassification implements PaymentClassification {
     public void addTimeCard(final LocalDate registerDate, final double timeAmount) {
         timeCards.put(registerDate, new TimeCard(timeAmount));
     }
+
+    public double getHourlyRate() {
+        return hourlyRate;
+    }
 }

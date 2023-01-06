@@ -111,10 +111,30 @@ class PayrollTest {
         final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 1000.00);
         addHourlyEmployee.execute();
 
-        ChangeAddressTransaction changeEmailTransaction = new ChangeAddressTransaction(empId, "changedEmail@naver.com");
+        ChangeAddressTransaction changeEmailTransaction = new ChangeAddressTransaction(empId, "changedHome");
         changeEmailTransaction.execute();
 
         final Employee employee = GpayrollDatabase.getEmployee(empId);
-        assertThat(employee.getAddress()).isEqualTo("changedEmail@naver.com");
+        assertThat(employee.getAddress()).isEqualTo("changedHome");
+    }
+
+    @Test
+    @DisplayName("시급제로 임금 유형 변경하는 기능 테스트")
+    void changeHourlyClassification() {
+        int empId = 1;
+        final AddSalariedEmployee salariedEmployee = new AddSalariedEmployee(empId, "Bob", "Home", 100000.00);
+        salariedEmployee.execute();
+
+        ChangeHourlyClassificationTransaction changeHourlyClassificationTransaction = new ChangeHourlyClassificationTransaction(
+                empId, 1000.00);
+        changeHourlyClassificationTransaction.execute();
+
+        final Employee employee = GpayrollDatabase.getEmployee(empId);
+        assertAll(
+                () -> assertThat(employee.getClassification()).isInstanceOf(HourlyPaymentClassification.class),
+                () -> assertThat(((HourlyPaymentClassification) employee.getClassification()).getHourlyRate())
+                        .isEqualTo(1000.00),
+                () -> assertThat(employee.getSchedule()).isInstanceOf(WeeklySchedule.class)
+        );
     }
 }
