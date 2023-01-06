@@ -60,6 +60,26 @@ class PayrollTest {
     }
 
     @Test
+    @DisplayName("수수료 받는 직원을 추가하는 기능을 테스트한다.")
+    void addCommissionedEmployee() {
+        int empId = 1;
+        final AddCommissionedEmployee addCommissionedEmployee = new AddCommissionedEmployee(empId, "Bob", "Home", 1000.00, 0.03);
+        addCommissionedEmployee.execute();
+
+        final Employee employee = GpayrollDatabase.getEmployee(empId);
+        CommissionedClassification classification = (CommissionedClassification) employee.getClassification();
+        BiweeklySchedule schedule = (BiweeklySchedule) employee.getSchedule();
+        final HoldMethod method = employee.getMethod();
+
+        assertAll(
+                () -> assertEquals("Bob", employee.getName()),
+                () -> assertNotNull(classification),
+                () -> assertNotNull(schedule),
+                () -> assertNotNull(method)
+        );
+    }
+
+    @Test
     @DisplayName("직원을 삭제하는 기능을 테스트한다.")
     void deleteEmployee() {
         int empId = 1;
@@ -91,7 +111,7 @@ class PayrollTest {
     }
 
     @Test
-    @DisplayName("직원 이름 변경하는 기능 테스트")
+    @DisplayName("직원 이름 변경하는 기능을 테스트한다.")
     void changeEmployeeName() {
         int empId = 1;
         final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 1000.00);
