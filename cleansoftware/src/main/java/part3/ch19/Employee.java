@@ -1,8 +1,8 @@
 package part3.ch19;
 
 public class Employee {
-    private final String name;
-    private final String address;
+    private String name;
+    private String address;
     private PaymentClassification classification;
     private PaymentSchedule schedule;
     private HoldMethod method;
@@ -38,5 +38,17 @@ public class Employee {
 
     public void setMethod(final HoldMethod holdMethod) {
         this.method = holdMethod;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+       return address;
+    }
+
+    public void setAddress(final String address) {
+        this.address = address;
     }
 }

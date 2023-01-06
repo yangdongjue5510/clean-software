@@ -74,7 +74,7 @@ class PayrollTest {
 
     @Test
     @DisplayName("타임카드를 시간제 직원에 더하는 기능을 테스트한다.")
-    void testTimeCardTransaction() {
+    void addTimeCardTransaction() {
         int empId = 1;
         final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 1000.00);
         addHourlyEmployee.execute();
@@ -88,5 +88,33 @@ class PayrollTest {
 
         final TimeCard timeCard = hourlyPaymentClassification.getTimeCard(LocalDate.now());
         assertThat(timeCard.getHours()).isEqualTo(8.0);
+    }
+
+    @Test
+    @DisplayName("직원 이름 변경하는 기능 테스트")
+    void changeEmployeeName() {
+        int empId = 1;
+        final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 1000.00);
+        addHourlyEmployee.execute();
+
+        ChangeNameTransaction changeNameTransaction = new ChangeNameTransaction(empId, "Changed Name");
+        changeNameTransaction.execute();
+
+        final Employee employee = GpayrollDatabase.getEmployee(empId);
+        assertThat(employee.getName()).isEqualTo("Changed Name");
+    }
+
+    @Test
+    @DisplayName("직원 주소 변경하는 기능 테스트")
+    void changeEmployeeEmail() {
+        int empId = 1;
+        final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 1000.00);
+        addHourlyEmployee.execute();
+
+        ChangeAddressTransaction changeEmailTransaction = new ChangeAddressTransaction(empId, "changedEmail@naver.com");
+        changeEmailTransaction.execute();
+
+        final Employee employee = GpayrollDatabase.getEmployee(empId);
+        assertThat(employee.getAddress()).isEqualTo("changedEmail@naver.com");
     }
 }
