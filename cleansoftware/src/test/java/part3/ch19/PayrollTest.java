@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static part3.ch19.Application.GpayrollDatabase;
 
 import java.time.LocalDate;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -108,6 +109,23 @@ class PayrollTest {
 
         final TimeCard timeCard = hourlyPaymentClassification.getTimeCard(LocalDate.now());
         assertThat(timeCard.getHours()).isEqualTo(8.0);
+    }
+
+    @Test
+    @DisplayName("수수료를 받는 직원이 영수증을 기록하는 기능을 테스트한다.")
+    void addSalesReceiptsTransaction() {
+        int empId = 1;
+        final AddCommissionedEmployee addCommissionedEmployee = new AddCommissionedEmployee(empId, "Bob", "Home",
+                1000.00, 0.01);
+        addCommissionedEmployee.execute();
+
+        SalesReceiptsTransaction salesReceiptsTransaction = new SalesReceiptsTransaction(empId, 1, LocalDate.now());
+        salesReceiptsTransaction.execute();
+
+        final Employee employee = GpayrollDatabase.getEmployee(empId);
+        final CommissionedClassification classification = (CommissionedClassification) employee.getClassification();
+        List<SalesReceipt> salesReceipts =  classification.getReceipts();
+        assertThat(salesReceipts.size()).isOne();
     }
 
     @Test
