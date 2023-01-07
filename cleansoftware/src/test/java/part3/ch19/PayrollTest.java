@@ -129,6 +129,26 @@ class PayrollTest {
     }
 
     @Test
+    @DisplayName("조합 비용을 지불하는 지 테스트한다.")
+    void addServiceChange() {
+        int empId = 1;
+        final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 100.00);
+        addHourlyEmployee.execute();
+
+        final Employee employee = GpayrollDatabase.getEmployee(empId);
+        UnionAffiliation affiliation = new UnionAffiliation(0.01);
+        employee.setAffiliation(affiliation);
+
+        int memberId = 2;
+        GpayrollDatabase.addUnionMember(memberId, employee);
+        ServiceChargeTransaction serviceChargeTransaction = new ServiceChargeTransaction(memberId, LocalDate.now(), 12.95);
+        serviceChargeTransaction.execute();
+
+        ServiceCharge serviceCharge = affiliation.getServiceCharge(LocalDate.now());
+        assertThat(serviceCharge.getAmount()).isEqualTo(12.95);
+    }
+
+    @Test
     @DisplayName("직원 이름 변경하는 기능을 테스트한다.")
     void changeEmployeeName() {
         int empId = 1;

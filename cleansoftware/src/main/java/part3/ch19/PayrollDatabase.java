@@ -7,4 +7,8 @@ public interface PayrollDatabase {
 
     void deleteEmployee(int empId);
     void clear();
+
+    void addUnionMember(int memberId, Employee employee);
+
+    Employee getUnionMember(int memberId);
 }

@@ -6,10 +6,12 @@ public class Employee {
     private PaymentClassification classification;
     private PaymentSchedule schedule;
     private HoldMethod method;
+    private Affiliation affiliation;
 
     public Employee(final String name, final String address) {
         this.name = name;
         this.address = address;
+        this.affiliation = new NoAffiliation();
     }
 
     public PaymentClassification getClassification() {
@@ -45,10 +47,21 @@ public class Employee {
     }
 
     public String getAddress() {
-       return address;
+        return address;
     }
 
     public void setAddress(final String address) {
         this.address = address;
+    }
+
+    public void setAffiliation(final Affiliation affiliation) {
+        this.affiliation = affiliation;
+    }
+
+    public UnionAffiliation getUnion() {
+        if (affiliation != null && affiliation instanceof UnionAffiliation) {
+            return (UnionAffiliation) affiliation;
+        }
+        throw new RuntimeException("조합에 참여하지 않은 직원.");
     }
 }

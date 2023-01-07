@@ -6,9 +6,11 @@ import java.util.Map;
 public class PayrollDatabaseImpl implements PayrollDatabase {
 
     private final Map<Integer, Employee> employees;
+    private final Map<Integer, Employee> unionMembers;
 
-    public PayrollDatabaseImpl(final Map<Integer, Employee> employees) {
+    public PayrollDatabaseImpl(final Map<Integer, Employee> employees, final Map<Integer, Employee> unionMembers) {
         this.employees = employees;
+        this.unionMembers = unionMembers;
     }
 
     @Override
@@ -29,5 +31,15 @@ public class PayrollDatabaseImpl implements PayrollDatabase {
     @Override
     public void clear() {
         employees.clear();
+    }
+
+    @Override
+    public void addUnionMember(final int memberId, final Employee employee) {
+        unionMembers.put(memberId, employee);
+    }
+
+    @Override
+    public Employee getUnionMember(final int memberId) {
+        return unionMembers.get(memberId);
     }
 }
