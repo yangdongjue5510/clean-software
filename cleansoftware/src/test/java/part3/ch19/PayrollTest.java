@@ -64,7 +64,8 @@ class PayrollTest {
     @DisplayName("수수료 받는 직원을 추가하는 기능을 테스트한다.")
     void addCommissionedEmployee() {
         int empId = 1;
-        final AddCommissionedEmployee addCommissionedEmployee = new AddCommissionedEmployee(empId, "Bob", "Home", 1000.00, 0.03);
+        final AddCommissionedEmployee addCommissionedEmployee = new AddCommissionedEmployee(empId, "Bob", "Home",
+                1000.00, 0.03);
         addCommissionedEmployee.execute();
 
         final Employee employee = GpayrollDatabase.getEmployee(empId);
@@ -124,7 +125,7 @@ class PayrollTest {
 
         final Employee employee = GpayrollDatabase.getEmployee(empId);
         final CommissionedClassification classification = (CommissionedClassification) employee.getClassification();
-        List<SalesReceipt> salesReceipts =  classification.getReceipts();
+        List<SalesReceipt> salesReceipts = classification.getReceipts();
         assertThat(salesReceipts.size()).isOne();
     }
 
@@ -141,7 +142,8 @@ class PayrollTest {
 
         int memberId = 2;
         GpayrollDatabase.addUnionMember(memberId, employee);
-        ServiceChargeTransaction serviceChargeTransaction = new ServiceChargeTransaction(memberId, LocalDate.now(), 12.95);
+        ServiceChargeTransaction serviceChargeTransaction = new ServiceChargeTransaction(memberId, LocalDate.now(),
+                12.95);
         serviceChargeTransaction.execute();
 
         ServiceCharge serviceCharge = affiliation.getServiceCharge(LocalDate.now());
@@ -208,5 +210,49 @@ class PayrollTest {
 
         final Employee employee = GpayrollDatabase.getEmployee(empId);
         assertThat(employee.getMethod()).isInstanceOf(DirectMethod.class);
+    }
+
+    @Test
+    @DisplayName("직원이 조합에 가입하도록 변경하는 기능 테스트")
+    void changeUnionAffiliationTransaction() {
+        int empId = 1;
+        int memberId = 2;
+        final AddSalariedEmployee salariedEmployee = new AddSalariedEmployee(empId, "Bob", "Home", 1000.00);
+        salariedEmployee.execute();
+
+        ChangeAffiliationTransaction changeAffiliationTransaction = new ChangeUnionAffiliationTransaction(empId,
+                memberId, 0.05);
+        changeAffiliationTransaction.execute();
+
+        final Employee employee = GpayrollDatabase.getEmployee(empId);
+        final Employee member = GpayrollDatabase.getUnionMember(memberId);
+
+        final UnionAffiliation union = (UnionAffiliation) employee.getAffiliation();
+        assertAll(
+                () -> assertThat(union).isNotNull(),
+                () -> assertThat(union.getFeeRate()).isEqualTo(0.05),
+                () -> assertThat(member).isNotNull()
+        );
+    }
+
+    @Test
+    @DisplayName("직원이 조합에서 탈퇴하도록 수정하는 기능 테스트")
+    void changeNoAffiliationTransaction() {
+        int empId = 1;
+        final AddCommissionedEmployee addCommissionedEmployee = new AddCommissionedEmployee(empId, "Bob", "Home",
+                10000.00, 0.05);
+        addCommissionedEmployee.execute();
+
+        final Employee employee = GpayrollDatabase.getEmployee(empId);
+        UnionAffiliation affiliation = new UnionAffiliation(0.01);
+        employee.setAffiliation(affiliation);
+
+        int memberId = 2;
+        GpayrollDatabase.addUnionMember(memberId, employee);
+
+        ChangeNoAffiliationTransaction changeNoAffiliationTransaction = new ChangeNoAffiliationTransaction(empId, memberId);
+        changeNoAffiliationTransaction.execute();
+
+        assertThat(employee.getAffiliation()).isNotNull();
     }
 }

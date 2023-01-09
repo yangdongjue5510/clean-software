@@ -42,4 +42,9 @@ public class PayrollDatabaseImpl implements PayrollDatabase {
     public Employee getUnionMember(final int memberId) {
         return unionMembers.get(memberId);
     }
+
+    @Override
+    public void deleteMember(final int memberId) {
+        unionMembers.remove(memberId);
+    }
 }

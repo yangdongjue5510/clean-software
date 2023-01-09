@@ -58,10 +58,7 @@ public class Employee {
         this.affiliation = affiliation;
     }
 
-    public UnionAffiliation getUnion() {
-        if (affiliation != null && affiliation instanceof UnionAffiliation) {
-            return (UnionAffiliation) affiliation;
-        }
-        throw new RuntimeException("조합에 참여하지 않은 직원.");
+    public Affiliation getAffiliation() {
+        return affiliation;
     }
 }

@@ -23,4 +23,8 @@ public class UnionAffiliation implements Affiliation {
     public void addServiceCharge(final ServiceCharge serviceCharge) {
         serviceCharges.add(serviceCharge);
     }
+
+    public double getFeeRate() {
+       return unionFeeRate;
+    }
 }

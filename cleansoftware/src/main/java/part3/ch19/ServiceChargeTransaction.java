@@ -18,7 +18,7 @@ public class ServiceChargeTransaction implements Transaction {
     @Override
     public void execute() {
         final Employee member = GpayrollDatabase.getUnionMember(memberId);
-        final UnionAffiliation union = member.getUnion();
+        final UnionAffiliation union = (UnionAffiliation) member.getAffiliation();
         union.addServiceCharge(new ServiceCharge(date, amount));
     }
 }

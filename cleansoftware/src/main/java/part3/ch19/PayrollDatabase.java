@@ -11,4 +11,6 @@ public interface PayrollDatabase {
     void addUnionMember(int memberId, Employee employee);
 
     Employee getUnionMember(int memberId);
+
+    void deleteMember(int memberId);
 }
