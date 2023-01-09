@@ -29,7 +29,7 @@ class PayrollTest {
         Employee employee = GpayrollDatabase.getEmployee(empId);
         SalariedClassification classification = (SalariedClassification) employee.getClassification();
         MonthlySchedule schedule = (MonthlySchedule) employee.getSchedule();
-        HoldMethod method = employee.getMethod();
+        PaymentMethod method = employee.getMethod();
 
         assertAll(
                 () -> assertEquals("Bob", employee.getName()),
@@ -50,7 +50,7 @@ class PayrollTest {
         Employee employee = GpayrollDatabase.getEmployee(empId);
         HourlyPaymentClassification classification = (HourlyPaymentClassification) employee.getClassification();
         WeeklySchedule schedule = (WeeklySchedule) employee.getSchedule();
-        HoldMethod method = employee.getMethod();
+        PaymentMethod method = employee.getMethod();
 
         assertAll(
                 () -> assertEquals("Bob", employee.getName()),
@@ -70,7 +70,7 @@ class PayrollTest {
         final Employee employee = GpayrollDatabase.getEmployee(empId);
         CommissionedClassification classification = (CommissionedClassification) employee.getClassification();
         BiweeklySchedule schedule = (BiweeklySchedule) employee.getSchedule();
-        final HoldMethod method = employee.getMethod();
+        final PaymentMethod method = employee.getMethod();
 
         assertAll(
                 () -> assertEquals("Bob", employee.getName()),
@@ -194,5 +194,19 @@ class PayrollTest {
                         .isEqualTo(1000.00),
                 () -> assertThat(employee.getSchedule()).isInstanceOf(WeeklySchedule.class)
         );
+    }
+
+    @Test
+    @DisplayName("급여 지급 방법을 직접 수령으로 변경하는 기능 테스트")
+    void changeDirectMethodTransaction() {
+        int empId = 1;
+        final AddSalariedEmployee salariedEmployee = new AddSalariedEmployee(empId, "Bob", "Home", 10000.00);
+        salariedEmployee.execute();
+
+        ChangeMethodTransaction changeMethodTransaction = new ChangeDirectMethodTransaction(empId, "Woori", "1234");
+        changeMethodTransaction.execute();
+
+        final Employee employee = GpayrollDatabase.getEmployee(empId);
+        assertThat(employee.getMethod()).isInstanceOf(DirectMethod.class);
     }
 }

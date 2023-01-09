@@ -5,7 +5,7 @@ public class Employee {
     private String address;
     private PaymentClassification classification;
     private PaymentSchedule schedule;
-    private HoldMethod method;
+    private PaymentMethod method;
     private Affiliation affiliation;
 
     public Employee(final String name, final String address) {
@@ -26,7 +26,7 @@ public class Employee {
         return name;
     }
 
-    public HoldMethod getMethod() {
+    public PaymentMethod getMethod() {
         return method;
     }
 
@@ -38,8 +38,8 @@ public class Employee {
         this.schedule = schedule;
     }
 
-    public void setMethod(final HoldMethod holdMethod) {
-        this.method = holdMethod;
+    public void setMethod(final PaymentMethod paymentMethod) {
+        this.method = paymentMethod;
     }
 
     public void setName(final String name) {

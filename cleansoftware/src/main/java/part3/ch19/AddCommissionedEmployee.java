@@ -26,7 +26,7 @@ public class AddCommissionedEmployee extends AddEmployeeTransaction {
         final Employee employee = new Employee(name, address);
         employee.setClassification(getClassification());
         employee.setSchedule(getSchedule());
-        employee.setMethod(new HoldMethod());
+        employee.setMethod(new HoldMethod(address));
         Application.GpayrollDatabase.addEmployee(empId, employee);
     }
 }
