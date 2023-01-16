@@ -27,7 +27,15 @@ public class HourlyPaymentClassification implements PaymentClassification {
     @Override
     public double calculatePay(final Paycheck paycheck) {
         return timeCards.values().stream()
-                .mapToDouble(timeCard -> timeCard.getHours() * hourlyRate)
+                .mapToDouble(this::calculatePerHour)
                 .sum();
+    }
+
+    private double calculatePerHour(final TimeCard timeCard) {
+        final double hours = timeCard.getHours();
+        if (hours >= 0 && hours <= 8.0) {
+            return hours * hourlyRate;
+        }
+        return (hourlyRate * 8) + (hours - 8) * 1.5 * hourlyRate;
     }
 }
