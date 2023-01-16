@@ -23,4 +23,9 @@ public class HourlyPaymentClassification implements PaymentClassification {
     public double getHourlyRate() {
         return hourlyRate;
     }
+
+    @Override
+    public double calculatePay(final Paycheck paycheck) {
+        return 0;
+    }
 }

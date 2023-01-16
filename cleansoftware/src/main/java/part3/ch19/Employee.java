@@ -1,6 +1,9 @@
 package part3.ch19;
 
+import java.time.LocalDate;
+
 public class Employee {
+    private Integer id;
     private String name;
     private String address;
     private PaymentClassification classification;
@@ -60,5 +63,27 @@ public class Employee {
 
     public Affiliation getAffiliation() {
         return affiliation;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(final Integer id) {
+        this.id = id;
+    }
+
+    public boolean isPayDay(final LocalDate payDate) {
+    return schedule.isPayDay(payDate);
+    }
+
+    public void payday(final Paycheck paycheck) {
+        double grossPay = classification.calculatePay(paycheck);
+        double deductions = affiliation.calculateDeductions(paycheck);
+        double netPay = grossPay - deductions;
+        paycheck.setGrossPay(grossPay);
+        paycheck.setDeductions(deductions);
+        paycheck.setNetPay(netPay);
+        method.pay(paycheck);
     }
 }

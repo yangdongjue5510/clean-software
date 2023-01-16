@@ -12,12 +12,12 @@ public class AddSalariedEmployee extends AddEmployeeTransaction {
 
     @Override
     public PaymentClassification getClassification() {
-        return new SalariedClassification();
+        return new SalariedClassification(salary);
     }
 
     @Override
     public PaymentSchedule getSchedule() {
-        return new MonthlySchedule(salary);
+        return new MonthlySchedule();
     }
 
     @Override

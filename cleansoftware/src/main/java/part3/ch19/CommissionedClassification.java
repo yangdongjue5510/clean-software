@@ -20,4 +20,9 @@ public class CommissionedClassification implements PaymentClassification {
     public void addSalesReceipt(final SalesReceipt salesReceipt) {
         salesReceipts.add(salesReceipt);
     }
+
+    @Override
+    public double calculatePay(final Paycheck paycheck) {
+        return 0;
+    }
 }

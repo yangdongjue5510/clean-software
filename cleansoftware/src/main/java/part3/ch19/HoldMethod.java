@@ -6,4 +6,9 @@ public class HoldMethod implements PaymentMethod {
     public HoldMethod(final String address) {
         this.address = address;
     }
+
+    @Override
+    public void pay(final Paycheck paycheck) {
+        paycheck.setField("Disposition", "Hold");
+    }
 }

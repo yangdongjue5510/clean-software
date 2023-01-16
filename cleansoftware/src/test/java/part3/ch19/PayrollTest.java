@@ -33,7 +33,6 @@ class PayrollTest {
 
         assertAll(
                 () -> assertEquals("Bob", employee.getName()),
-                () -> assertEquals(1000.00, schedule.getSalary()),
                 () -> assertNotNull(classification),
                 () -> assertNotNull(schedule),
                 () -> assertNotNull(method)
@@ -254,5 +253,26 @@ class PayrollTest {
         changeNoAffiliationTransaction.execute();
 
         assertThat(employee.getAffiliation()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("월급 받는 직원에게 정상적인 날짜에 임금 지급하는 기능")
+    void paySingleSalariedEmployee() {
+        int empId = 1;
+        final AddSalariedEmployee addSalariedEmployee = new AddSalariedEmployee(empId, "Bob", "Home", 10000.00);
+        addSalariedEmployee.execute();
+
+        final LocalDate payDate = LocalDate.of(2023, 1, 31);
+        PaydayTransaction paydayTransaction = new PaydayTransaction(payDate);
+        paydayTransaction.execute();
+
+        Paycheck paycheck = paydayTransaction.getPaycheck(empId);
+        assertAll(
+                () -> assertThat(paycheck.getPayDate()).isEqualTo(payDate),
+                () -> assertThat(paycheck.getGrossPay()).isEqualTo(10000.00),
+                () -> assertThat(paycheck.getDeductions()).isEqualTo(0.0),
+                () -> assertThat(paycheck.getFields("Disposition")).isEqualTo("Hold"),
+                () -> assertThat(paycheck.getNetPay()).isEqualTo(10000.00)
+        );
     }
 }

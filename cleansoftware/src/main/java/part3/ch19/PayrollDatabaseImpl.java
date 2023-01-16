@@ -1,6 +1,8 @@
 package part3.ch19;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class PayrollDatabaseImpl implements PayrollDatabase {
@@ -20,6 +22,7 @@ public class PayrollDatabaseImpl implements PayrollDatabase {
 
     @Override
     public void addEmployee(final int empId, final Employee employee) {
+        employee.setId(empId);
         employees.put(empId, employee);
     }
 
@@ -46,5 +49,10 @@ public class PayrollDatabaseImpl implements PayrollDatabase {
     @Override
     public void deleteMember(final int memberId) {
         unionMembers.remove(memberId);
+    }
+
+    @Override
+    public List<Employee> getEmployees() {
+       return new ArrayList<>(employees.values());
     }
 }

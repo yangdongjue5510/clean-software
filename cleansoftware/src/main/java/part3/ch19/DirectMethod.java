@@ -8,4 +8,9 @@ public class DirectMethod implements PaymentMethod {
         this.bank = bank;
         this.account = account;
     }
+
+    @Override
+    public void pay(final Paycheck paycheck) {
+        System.out.printf("%s 은행 계좌 번호 %s로 %f $ 입금", bank, account, paycheck.getNetPay());
+    }
 }

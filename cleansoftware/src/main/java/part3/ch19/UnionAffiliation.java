@@ -27,4 +27,9 @@ public class UnionAffiliation implements Affiliation {
     public double getFeeRate() {
        return unionFeeRate;
     }
+
+    @Override
+    public double calculateDeductions(final Paycheck paycheck) {
+        return paycheck.getGrossPay() * unionFeeRate;
+    }
 }
