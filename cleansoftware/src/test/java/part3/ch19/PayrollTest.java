@@ -343,4 +343,23 @@ class PayrollTest {
 
         assertNull(paydayTransaction.getPaycheck(empId));
     }
+
+    @Test
+    @DisplayName("타임카드가 두개 있는 시간제 직원에게 임금 지급하는 기능")
+    void paySingleHourlyEmployeeTwoTimeCard() {
+        int empId = 1;
+        final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 15.25);
+        addHourlyEmployee.execute();
+        final LocalDate thursdayDate = LocalDate.of(2021, 12, 23);
+        final LocalDate fridayDate = LocalDate.of(2021, 12, 24);
+
+        final TimeCardTransaction firstTimeCardTransaction = new TimeCardTransaction(thursdayDate, 2.0, empId);
+        firstTimeCardTransaction.execute();
+        final TimeCardTransaction secondTimeCardTransaction = new TimeCardTransaction(fridayDate, 3.0, empId);
+        secondTimeCardTransaction.execute();
+
+        final PaydayTransaction paydayTransaction = new PaydayTransaction(fridayDate);
+        paydayTransaction.execute();
+        validateHourlyPaycheck(paydayTransaction, empId, fridayDate, 15.25 * 5);
+    }
 }
