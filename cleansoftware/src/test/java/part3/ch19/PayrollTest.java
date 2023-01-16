@@ -328,6 +328,19 @@ class PayrollTest {
         final PaydayTransaction paydayTransaction = new PaydayTransaction(fridayDate);
         paydayTransaction.execute();
         validateHourlyPaycheck(paydayTransaction, empId, fridayDate, (8 + 1.5) * 15.25);
+    }
 
+    @Test
+    @DisplayName("금요일이 아닌 날짜에 임금 지급을 요구하면 수표가 Null 반환하는 기능")
+    void paySingleHourlyEmployeeWrongDate() {
+        int empId = 1;
+        final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 15.25);
+        addHourlyEmployee.execute();
+        final LocalDate thursdayDate = LocalDate.of(2021, 12, 23);
+
+        final PaydayTransaction paydayTransaction = new PaydayTransaction(thursdayDate);
+        paydayTransaction.execute();
+
+        assertNull(paydayTransaction.getPaycheck(empId));
     }
 }
