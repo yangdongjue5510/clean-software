@@ -298,4 +298,19 @@ class PayrollTest {
                 () -> assertThat(paycheck.getNetPay()).isEqualTo(pay)
         );
     }
+
+    @Test
+    @DisplayName("타임카드가 하나 있는 시간제 직원에게 임금 지급하는 기능")
+    void paySingleHourlyEmployeeOneTimeCard() {
+        int empId = 1;
+        final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 15.25);
+        addHourlyEmployee.execute();
+        final LocalDate fridayDate = LocalDate.of(2021, 12, 24);
+
+        final TimeCardTransaction timeCardTransaction = new TimeCardTransaction(fridayDate, 2.0, empId);
+        timeCardTransaction.execute();
+        final PaydayTransaction paydayTransaction = new PaydayTransaction(fridayDate);
+        paydayTransaction.execute();
+        validateHourlyPaycheck(paydayTransaction, empId, fridayDate, 30.5);
+    }
 }
