@@ -1,7 +1,9 @@
 package part3.ch19;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class HourlyPaymentClassification implements PaymentClassification {
     private final Map<LocalDate, TimeCard> timeCards;
@@ -26,9 +28,15 @@ public class HourlyPaymentClassification implements PaymentClassification {
 
     @Override
     public double calculatePay(final Paycheck paycheck) {
-        return timeCards.values().stream()
-                .mapToDouble(this::calculatePerHour)
+        final LocalDate payDate = paycheck.getPayDate();
+        return timeCards.entrySet().stream()
+                .filter(entry -> isInSameWeek(payDate, entry))
+                .mapToDouble(entry -> calculatePerHour(entry.getValue()))
                 .sum();
+    }
+
+    private boolean isInSameWeek(final LocalDate payDate, final Entry<LocalDate, TimeCard> entry) {
+        return ChronoUnit.WEEKS.between(payDate, entry.getKey()) == 0;
     }
 
     private double calculatePerHour(final TimeCard timeCard) {

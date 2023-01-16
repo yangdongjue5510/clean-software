@@ -362,4 +362,24 @@ class PayrollTest {
         paydayTransaction.execute();
         validateHourlyPaycheck(paydayTransaction, empId, fridayDate, 15.25 * 5);
     }
+
+    @Test
+    @DisplayName("타임카드가 현재 지금 주기인 경우만 임금 지급한다.")
+    void paySingleHourlyEmployeeWithTimeCardsSpanningTwoPayPeriods() {
+        int empId = 1;
+        final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 15.25);
+        addHourlyEmployee.execute();
+        final LocalDate validPeriodDate = LocalDate.of(2021, 12, 24);
+        final LocalDate invalidPeriodDate = LocalDate.of(2021, 12, 17);
+
+        final TimeCardTransaction firstTimeCardTransaction = new TimeCardTransaction(validPeriodDate, 2.0, empId);
+        firstTimeCardTransaction.execute();
+        final TimeCardTransaction secondTimeCardTransaction = new TimeCardTransaction(invalidPeriodDate, 3.0, empId);
+        secondTimeCardTransaction.execute();
+
+        final PaydayTransaction paydayTransaction = new PaydayTransaction(validPeriodDate);
+        paydayTransaction.execute();
+        validateHourlyPaycheck(paydayTransaction, empId, validPeriodDate, 15.25 * 2);
+
+    }
 }
