@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static part3.ch19.Application.GpayrollDatabase;
 
 import java.time.LocalDate;
@@ -380,6 +381,29 @@ class PayrollTest {
         final PaydayTransaction paydayTransaction = new PaydayTransaction(validPeriodDate);
         paydayTransaction.execute();
         validateHourlyPaycheck(paydayTransaction, empId, validPeriodDate, 15.25 * 2);
+    }
 
+    @Test
+    @DisplayName("조합에 속한 직원이 공제된 임금을 지급한다.")
+    void salariedUnionMemberDues() {
+        int empId = 1;
+        final AddHourlyEmployee addHourlyEmployee = new AddHourlyEmployee(empId, "Bob", "Home", 15.24);
+        addHourlyEmployee.execute();
+
+        int memberId = Integer.MAX_VALUE;
+        final ChangeUnionAffiliationTransaction changeUnionAffiliationTransaction = new ChangeUnionAffiliationTransaction(
+                empId, memberId, 9.42);
+        changeUnionAffiliationTransaction.execute();
+        final LocalDate fridayDate = LocalDate.of(2021, 12, 24);
+
+        final TimeCardTransaction firstTimeCardTransaction = new TimeCardTransaction(fridayDate, 2.0, empId);
+        firstTimeCardTransaction.execute();
+        final PaydayTransaction paydayTransaction = new PaydayTransaction(fridayDate);
+        paydayTransaction.execute();
+        final Paycheck paycheck = paydayTransaction.getPaycheck(empId);
+        assertAll(
+                () -> assertSame(paycheck.getPayDate(), fridayDate),
+                () -> assertThat(paycheck.getGrossPay()).isEqualTo(15.24 * 2)
+        );
     }
 }

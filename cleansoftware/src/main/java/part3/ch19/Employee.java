@@ -74,7 +74,7 @@ public class Employee {
     }
 
     public boolean isPayDay(final LocalDate payDate) {
-    return schedule.isPayDay(payDate);
+        return schedule.isPayDay(payDate);
     }
 
     public void payday(final Paycheck paycheck) {
@@ -85,5 +85,9 @@ public class Employee {
         paycheck.setDeductions(deductions);
         paycheck.setNetPay(netPay);
         method.pay(paycheck);
+    }
+
+    public LocalDate getPayPeriodStartDate(LocalDate payDate) {
+        return payDate.minusDays(payDate.getDayOfWeek().getValue() - 1);
     }
 }

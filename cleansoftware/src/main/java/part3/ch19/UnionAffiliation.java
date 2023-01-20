@@ -1,6 +1,7 @@
 package part3.ch19;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,11 @@ public class UnionAffiliation implements Affiliation {
 
     @Override
     public double calculateDeductions(final Paycheck paycheck) {
-        return paycheck.getGrossPay() * unionFeeRate;
+        int fridays = getNumbersOfFridays(paycheck.getDateOfPeriodStart(), paycheck.getPayDate());
+        return paycheck.getGrossPay() * (unionFeeRate * fridays);
+    }
+
+    private int getNumbersOfFridays(final LocalDate start, final LocalDate end) {
+        return (int) start.until(end, ChronoUnit.WEEKS) / 7;
     }
 }

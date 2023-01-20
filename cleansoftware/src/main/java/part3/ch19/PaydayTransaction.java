@@ -22,7 +22,7 @@ public class PaydayTransaction implements Transaction {
 
     private void payday(final Employee employee) {
         if (employee.isPayDay(payDate)) {
-            final Paycheck paycheck = new Paycheck(payDate);
+            final Paycheck paycheck = new Paycheck(employee.getPayPeriodStartDate(payDate), payDate);
             paychecks.put(employee.getId(), paycheck);
             employee.payday(paycheck);
         }

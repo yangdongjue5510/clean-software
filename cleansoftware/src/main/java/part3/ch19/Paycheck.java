@@ -6,14 +6,16 @@ import java.util.Map;
 
 public class Paycheck {
 
+    private final LocalDate dateOfPeriodStart;
     private final LocalDate payDate;
     private double grossPay;
     private double deductions;
     private double netPay;
     private final Map<String, String> fields = new HashMap<>();
 
-    public Paycheck(final LocalDate payDate) {
+    public Paycheck(final LocalDate dateOfPeriodStart, final LocalDate payDate) {
         this.payDate = payDate;
+        this.dateOfPeriodStart = dateOfPeriodStart;
     }
 
     public LocalDate getPayDate() {
@@ -50,5 +52,9 @@ public class Paycheck {
 
     public void setNetPay(final double netPay) {
         this.netPay = netPay;
+    }
+
+    public LocalDate getDateOfPeriodStart() {
+        return dateOfPeriodStart;
     }
 }
