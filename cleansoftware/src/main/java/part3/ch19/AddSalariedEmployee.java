@@ -1,6 +1,13 @@
 package part3.ch19;
 
-import static part3.ch19.Application.GpayrollDatabase;
+import static part3.ch19.application.Application.GpayrollDatabase;
+
+import part3.ch19.classifications.SalariedClassification;
+import part3.ch19.methods.HoldMethod;
+import part3.ch19.payroll_domain.Employee;
+import part3.ch19.payroll_domain.PaymentClassification;
+import part3.ch19.payroll_domain.PaymentSchedule;
+import part3.ch19.schedules.MonthlySchedule;
 
 public class AddSalariedEmployee extends AddEmployeeTransaction {
     private final double salary;

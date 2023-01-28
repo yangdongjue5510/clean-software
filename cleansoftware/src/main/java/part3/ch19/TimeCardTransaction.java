@@ -1,8 +1,11 @@
 package part3.ch19;
 
-import static part3.ch19.Application.GpayrollDatabase;
+import static part3.ch19.application.Application.GpayrollDatabase;
 
 import java.time.LocalDate;
+import part3.ch19.classifications.HourlyPaymentClassification;
+import part3.ch19.payroll_domain.Employee;
+import part3.ch19.payroll_domain.Transaction;
 
 public class TimeCardTransaction implements Transaction {
     private final LocalDate registerDate;

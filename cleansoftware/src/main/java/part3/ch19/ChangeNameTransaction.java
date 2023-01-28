@@ -1,6 +1,8 @@
 package part3.ch19;
 
-import static part3.ch19.Application.GpayrollDatabase;
+import static part3.ch19.application.Application.GpayrollDatabase;
+
+import part3.ch19.payroll_domain.Employee;
 
 public class ChangeNameTransaction extends ChangeEmployeeTransaction {
     private final String name;

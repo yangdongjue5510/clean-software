@@ -1,5 +1,13 @@
 package part3.ch19;
 
+import part3.ch19.application.Application;
+import part3.ch19.classifications.CommissionedClassification;
+import part3.ch19.methods.HoldMethod;
+import part3.ch19.payroll_domain.Employee;
+import part3.ch19.payroll_domain.PaymentClassification;
+import part3.ch19.payroll_domain.PaymentSchedule;
+import part3.ch19.schedules.BiweeklySchedule;
+
 public class AddCommissionedEmployee extends AddEmployeeTransaction {
     private final double salary;
     private final double commissionRate;

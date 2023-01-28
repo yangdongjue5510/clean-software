@@ -6,13 +6,32 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static part3.ch19.Application.GpayrollDatabase;
+import static part3.ch19.application.Application.GpayrollDatabase;
 
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import part3.ch19.affiliations.ChangeAffiliationTransaction;
+import part3.ch19.affiliations.ChangeNoAffiliationTransaction;
+import part3.ch19.affiliations.ChangeUnionAffiliationTransaction;
+import part3.ch19.affiliations.UnionAffiliation;
+import part3.ch19.classifications.ChangeHourlyClassificationTransaction;
+import part3.ch19.classifications.CommissionedClassification;
+import part3.ch19.classifications.HourlyPaymentClassification;
+import part3.ch19.classifications.SalariedClassification;
+import part3.ch19.classifications.SalesReceipt;
+import part3.ch19.classifications.TimeCard;
+import part3.ch19.methods.ChangeDirectMethodTransaction;
+import part3.ch19.methods.ChangeMethodTransaction;
+import part3.ch19.methods.DirectMethod;
+import part3.ch19.payroll_domain.Employee;
+import part3.ch19.payroll_domain.PaymentClassification;
+import part3.ch19.payroll_domain.PaymentMethod;
+import part3.ch19.schedules.BiweeklySchedule;
+import part3.ch19.schedules.MonthlySchedule;
+import part3.ch19.schedules.WeeklySchedule;
 
 class PayrollTest {
     @BeforeEach
